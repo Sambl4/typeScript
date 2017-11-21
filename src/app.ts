@@ -8,12 +8,33 @@ function showHello(divName: string, name: string) {
 enum Category { JavaScript, CSS, HTML, TypeScript, Angular2 }
 
 
-function getAllBooks() {
+function getAllBooks(): Array<any> {
 	let books= [
-		{ title: 'Refactoring JavaScript', author: 'Evan Burchard', available: true, category: Category.JavaScript },
-		{ title: 'JavaScript Testing', author: 'Liang Yuxian Eugene', available: false, category: Category.JavaScript },
-		{ title: 'CSS Secrets', author: 'Lea Verou', available: true, category: Category.CSS },
-		{ title: 'Mastering JavaScript Object-Oriented Programming', author: 'Andrea Chiarelli', available: true, category: Category.JavaScript }
+		{ 
+			id: 1,
+			title: 'Refactoring JavaScript',
+			author: 'Evan Burchard',
+			available: true,
+			category: Category.JavaScript
+		}, {
+			id: 2, 
+			title: 'JavaScript Testing',
+			author: 'Liang Yuxian Eugene', 
+			available: false, 
+			category: Category.JavaScript 
+		}, { 
+			id: 3, 
+			title: 'CSS Secrets',
+			author: 'Lea Verou',
+			available: true,
+			category: Category.CSS
+		}, { 
+			id: 4,
+			title: 'Mastering JavaScript Object-Oriented Programming',
+			author: 'Andrea Chiarelli',
+			available: true,
+			category: Category.JavaScript
+		}
 	]
 	return books;
 }
@@ -51,8 +72,18 @@ function logBookTitle(titles: string[]): void {
 	}
 }
 
+function getBookById(id: number): any {
+	const allBooks = getAllBooks();
+
+	return allBooks.find(book => book.id === id);
+}
+
 let allBooks = getAllBooks();
 logFirstAvailable(allBooks);
 
 const javaScriptBooks = getBookTitleByCategory(Category.JavaScript);
 logBookTitle(javaScriptBooks);
+
+// javaScriptBooks.forEach((val, ind, arr) => console.log(`${++ind} - ${val}`));
+
+console.log(getBookById(2));
