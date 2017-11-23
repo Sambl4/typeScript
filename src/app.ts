@@ -176,6 +176,64 @@ function printBook (book: Book): void {
 	console.log(`${book.title} by ${book.author}`);
 }
 
+abstract class ReferenceItem {
+	// title: string;
+	// year: number;
+
+	// constructor(newTitle: string, newYear: number) {
+	// 	console.log('creating new title and year');
+	// 	this.title = newTitle;
+	// 	this.year = newYear;
+	// }
+
+	private _publisher: string;
+
+	static department: string = 'Research';
+
+	constructor(
+		public title: string,
+		protected year: number
+	) {
+		console.log('creating new title and year');
+	}
+
+	get publisher(): string {
+		return this._publisher.toUpperCase();
+	}
+
+	set publisher(newPublisher: string) {
+		this._publisher = newPublisher;
+	}
+
+	printItem(): void {
+		console.log(`${this.title} was published in ${this.year}`);
+		console.log(`${ReferenceItem.department}`);
+	}
+
+	abstract printCitation(): void;
+}
+
+class Encyclopedia extends ReferenceItem {
+	constructor (
+			newTitle: string,
+			newYear: number,
+			public edition: number
+	) {
+		super(newTitle, newYear);
+	}
+
+	printItem(): void {
+		super.printItem();
+		console.log(`Edition: ${this.edition} ${this.year}`)
+	}
+
+	printCitation(): void {
+		console.log(`${this.title} by ${this.year}`);
+	}
+}
+
+
+
 
 
 //---&&---------------------
@@ -232,11 +290,11 @@ function printBook (book: Book): void {
 // logDamage = (reason: string) => console.log(`Damaged: ${reason}`);
 // logDamage('_missing back cover');
 
-let favoriteAuthor: Author = {
-	email: 'qwe@com',
-	name: 'Ann',
-	numBooksPublished: 10
-};
+// let favoriteAuthor: Author = {
+// 	email: 'qwe@com',
+// 	name: 'Ann',
+// 	numBooksPublished: 10
+// };
 
 // let favoriteLibrarian: Librarian = {
 // 	name: 'Boris',
@@ -245,6 +303,14 @@ let favoriteAuthor: Author = {
 // 	assistCustomer: (name: string) => console.log(`Assist ${name}`)
 // };
 
-let favoriteLibrarian: Librarian = new UniversityLibrarian();
-console.log(favoriteLibrarian);
+// let favoriteLibrarian: Librarian = new UniversityLibrarian();
+// console.log(favoriteLibrarian);
 
+// const ref: ReferenceItem = new ReferenceItem('title', 2017);
+// ref.printItem();
+// ref.publisher = 'My Publisher';
+// console.log(ref.publisher)
+
+const refBook: Encyclopedia = new Encyclopedia ('a', 2017, 100);
+console.log(refBook);
+refBook.printItem();
