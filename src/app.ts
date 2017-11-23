@@ -1,53 +1,13 @@
+import { Category } from './enum';
+import { Book, Logger, Author, Librarian } from './interface';
+import { UniversityLibrarian, ReferenceItem } from './classes';
+
 showHello("greeting", "TypeScript");
 
 function showHello(divName: string, name: string) {
     const elt = document.getElementById(divName);
     elt.innerText = `Hello from ${name}`;
 }
-
-enum Category { JavaScript, CSS, HTML, TypeScript, Angular2 }
-
-interface Book {
-	id: number;
-	title: string;
-	author: string;
-	available: boolean;
-	category: Category;
-	pages?: number;
-	// copies?: number;
-	// markDamaged?: (reason: string) => void;
-	markDamaged?: DamageLogger;
-}
-
-interface DamageLogger {
-	(reason: string): void;
-}
-
-interface Person {
-	name: string;
-	email: string;
-}
-
-interface Author extends Person {
-	numBooksPublished: number;
-}
-
-interface Librarian extends Person {
-	department: string;
-	assistCustomer: (custName: string) => void;
-}
-
-class UniversityLibrarian implements Librarian {
-	name: string = 'Ann';
-	email: string;
-	department: string;
-	assistCustomer(custName: string): void {
-		console.log('Assist');
-	}
-}
-
-
-
 
 function getAllBooks(): Book[] {
 	let books = [
@@ -176,42 +136,7 @@ function printBook (book: Book): void {
 	console.log(`${book.title} by ${book.author}`);
 }
 
-abstract class ReferenceItem {
-	// title: string;
-	// year: number;
 
-	// constructor(newTitle: string, newYear: number) {
-	// 	console.log('creating new title and year');
-	// 	this.title = newTitle;
-	// 	this.year = newYear;
-	// }
-
-	private _publisher: string;
-
-	static department: string = 'Research';
-
-	constructor(
-		public title: string,
-		protected year: number
-	) {
-		console.log('creating new title and year');
-	}
-
-	get publisher(): string {
-		return this._publisher.toUpperCase();
-	}
-
-	set publisher(newPublisher: string) {
-		this._publisher = newPublisher;
-	}
-
-	printItem(): void {
-		console.log(`${this.title} was published in ${this.year}`);
-		console.log(`${ReferenceItem.department}`);
-	}
-
-	abstract printCitation(): void;
-}
 
 class Encyclopedia extends ReferenceItem {
 	constructor (
@@ -287,6 +212,7 @@ class Encyclopedia extends ReferenceItem {
 // // myBook.markDamaged('missing back cover');
 
 // let logDamage: DamageLogger;
+// let logDamage: Logger;
 // logDamage = (reason: string) => console.log(`Damaged: ${reason}`);
 // logDamage('_missing back cover');
 
