@@ -1,12 +1,24 @@
 import * as Interfaces from './interface';
+import { sealed, logger, writable } from './decorators';
 
-
+@logger
+@sealed('UniversityLibrarian')
 class UniversityLibrarian implements Interfaces.Librarian {
 	name: string = 'Ann';
 	email: string;
 	department: string;
 	assistCustomer(custName: string): void {
 		console.log('Assist');
+	}
+
+	@writable(true)
+	assistFaculty() {
+		console.log('Assist faculty');
+	}
+
+	@writable(false)
+	teachCommunity() {
+		console.log('Teach community');
 	}
 }
 

@@ -1,6 +1,9 @@
 import { Category } from './enum';
-import { Book, Logger, Author, Librarian } from './interface';
+import { Book, Logger, Author, Librarian, Magazine } from './interface';
 import { UniversityLibrarian, ReferenceItem } from './classes';
+import RefBook from './encyclopedia';
+import { purge, getBooksByCategory, logCategorySearch } from './lib/utility-functions';
+import Shelf from './shelf';
 
 showHello("greeting", "TypeScript");
 
@@ -9,159 +12,11 @@ function showHello(divName: string, name: string) {
     elt.innerText = `Hello from ${name}`;
 }
 
-function getAllBooks(): Book[] {
-	let books = [
-		{ 
-			id: 1,
-			title: 'Refactoring JavaScript',
-			author: 'Evan Burchard',
-			available: true,
-			category: Category.JavaScript
-		}, {
-			id: 2, 
-			title: 'JavaScript Testing',
-			author: 'Liang Yuxian Eugene', 
-			available: false, 
-			category: Category.JavaScript 
-		}, { 
-			id: 3, 
-			title: 'CSS Secrets',
-			author: 'Lea Verou',
-			available: true,
-			category: Category.CSS
-		}, { 
-			id: 4,
-			title: 'Mastering JavaScript Object-Oriented Programming',
-			author: 'Andrea Chiarelli',
-			available: true,
-			category: Category.JavaScript
-		}
-	];
-
-	return books;
-}
-
-function logFirstAvailable(books: Array<any> = getAllBooks()): void {
-	let numberOfBooks: number = books.length;
-	let firstAvailable: string = '';
-
-	for (let currentBook of books) {
-		if (currentBook.available) {
-			firstAvailable = currentBook.title;
-			break;
-		}
-	}
-
-	console.log(`Total Books: ${numberOfBooks}`);
-	console.log(`First available: ${firstAvailable}`);
-}
-
-function getBookTitleByCategory(categoryFilter: Category = Category.JavaScript): Array<string> {
-	const allBooks = getAllBooks();
-	const filteredTitles: string[] = [];
-
-	for (let currentBook of allBooks) {
-		if (currentBook.category === categoryFilter) {
-			filteredTitles.push(currentBook.title);
-		}
-	}
-	return filteredTitles;
-}
-
-function logBookTitle(titles: string[]): void {
-	for (let title of titles) {
-		// console.log(title);
-	}
-}
-
-function getBookById(id: number): Book | undefined {
-	const allBooks = getAllBooks();
-
-	return allBooks.find(book => book.id === id);
-}
-
-function createCustomerID (name: string, id: number): string {
-	return `${name}${id}`;
-}
-
-function createCustomer (name: string, age?: number, city?: string): void {
-	console.log(name);
-	if (age) {
-		console.log(age);
-	}
-	if (city) {
-		console.log(city);
-	}
-}
-
-function checkoutBooks(customer: string, ...bookIDs: number[]): string[] {
-	console.log(`checking out books for ${customer}`);
-
-	const booksCheckedOut: string[] = [];
-
-	for (let id of bookIDs) {
-		let book = getBookById(id);
-		if(book && book.available) {
-			booksCheckedOut.push(book.title);
-		}
-	}
-
-	return booksCheckedOut;
-}
-
-function getTitles(author: string): string[];
-function getTitles(available: boolean): string[];
-function getTitles(bookProp: string | boolean): string[] {
-	const allBooks = getAllBooks();
-	const result: string[] = [];
-
-	if (typeof bookProp === 'string') {
-		for(let book of allBooks) {
-			if(book.author === bookProp) {
-				result.push(book.title);
-			}
-		}
-	} else if (typeof bookProp === 'boolean') {
-		for(let book of allBooks) {
-			if(book.available === bookProp) {
-				result.push(book.title);
-			}
-		}
-	}
-
-	return result;
-};
-
-function printBook (book: Book): void {
-	console.log(`${book.title} by ${book.author}`);
-}
+//--------------------------------------
 
 
 
-class Encyclopedia extends ReferenceItem {
-	constructor (
-			newTitle: string,
-			newYear: number,
-			public edition: number
-	) {
-		super(newTitle, newYear);
-	}
-
-	printItem(): void {
-		super.printItem();
-		console.log(`Edition: ${this.edition} ${this.year}`)
-	}
-
-	printCitation(): void {
-		console.log(`${this.title} by ${this.year}`);
-	}
-}
-
-
-
-
-
-//---&&---------------------
+//--------------------------------------
 // let allBooks = getAllBooks();
 // logFirstAvailable(allBooks);
 
@@ -237,6 +92,51 @@ class Encyclopedia extends ReferenceItem {
 // ref.publisher = 'My Publisher';
 // console.log(ref.publisher)
 
-const refBook: Encyclopedia = new Encyclopedia ('a', 2017, 100);
-console.log(refBook);
-refBook.printItem();
+// const refBook: RefBook = new RefBook('a', 2017, 100);
+// console.log(refBook);
+// refBook.printItem();
+
+let inventory: Array<Book> = [
+	{ id: 10, title: 'The C Programming Language', author: 'K & R', available: true, category: Category.Software },
+	{ id: 11, title: 'Code Complete', author: 'Steve McConnell', available: true, category: Category.Software },
+	{ id: 12, title: '8-Bit Graphics with Cobol', author: 'A. B.', available: true, category: Category.Software },
+	{ id: 13, title: 'Cool autoexec.bat Scripts!', author: 'C. D.', available: true, category: Category.Software }
+];
+
+// let purgeBooks: Array<Book> = purge<Book>(inventory);
+// purgeBooks.forEach(book => console.log(book.title));
+
+// let purgeNumbers: Array<number> = purge<number>([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+// console.log(purgeNumbers);
+
+// const bookShelf: Shelf<Book> = new Shelf<Book>();
+// inventory.forEach(book => bookShelf.add(book));
+// const firstBook: Book = bookShelf.getFirst();
+// console.log(firstBook.title);
+
+// const magazines: Array<Magazine> = [
+//     { title: 'Programming Language Monthly', publisher: 'Code Mags' },
+//     { title: 'Literary Fiction Quarterly', publisher: 'College Press' },
+//     { title: 'Five Points', publisher: 'GSU' }
+// ];
+ 
+// const magazineShelf: Shelf<Magazine> = new Shelf<Magazine>();
+// magazines.forEach(mag => magazineShelf.add(mag));
+// const firstMagazine: Magazine = magazineShelf.getFirst();
+// console.log(firstMagazine.title);
+
+// magazineShelf.printTitles();
+// const mag = magazineShelf.find('Five Points');
+// console.log(mag);
+
+// let l = new UniversityLibrarian();
+// l.assistFaculty = () => console.log('new assist faculty method');
+// l.assistFaculty();
+
+// l.teachCommunity = () => console.log('new assist faculty method');
+// l.teachCommunity();
+
+console.log('Beginning search...');
+getBooksByCategory(Category.JavaScript, logCategorySearch);
+getBooksByCategory(Category.Software, logCategorySearch);
+console.log('End search')
